@@ -1,7 +1,7 @@
 - name: Build and Push Backend
         uses: docker/build-push-action@v5
         with:
-          context: .                # Keep context as the root so it can see all your code
-          file: ./manifests/Dockerfile   # Tell it the Dockerfile is in the manifests folder
+          context: ./taskapp                # Change this to the folder where requirements.txt actually lives!
+          file: ./manifests/Dockerfile      # Keep pointing to your Dockerfile here
           push: true
           tags: ghcr.io/ts-a-devops/taskapp-backend:v1.0.0
