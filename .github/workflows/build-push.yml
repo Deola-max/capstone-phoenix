@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: List files (Debugging)
+        run: ls -R  # This will print every single file/folder the runner sees
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -21,7 +24,7 @@ jobs:
       - name: Build and Push Backend
         uses: docker/build-push-action@v5
         with:
-          context: ./taskapp-backend
+          context: .  # Change to dot to see if it fixes the "not found" error
           file: ./taskapp-backend/Dockerfile
           push: true
           tags: ghcr.io/ts-a-devops/taskapp-backend:v1.0.0
