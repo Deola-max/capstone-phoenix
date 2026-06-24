@@ -1,3 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phoenix-frontend
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: phoenix-frontend
+  template:
+    metadata:
+      labels:
+        app: phoenix-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ghcr.io/ts-a-devops/taskapp-frontend:v1.0.0
+        ports:
+        - containerPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -15,54 +35,7 @@ spec:
         app: phoenix-backend
     spec:
       containers:
-        - name: backend
-          image: nginx:alpine # Using a lightweight production engine placeholder
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: phoenix-backend-svc
-  namespace: default
-spec:
-  ports:
-    - port: 80
-      targetPort: 80
-  selector:
-    app: phoenix-backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: phoenix-frontend
-  namespace: default
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: phoenix-frontend
-  template:
-    metadata:
-      labels:
-        app: phoenix-frontend
-    spec:
-      containers:
-        - name: frontend
-          image: nginx:alpine
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: phoenix-frontend-svc
-  namespace: default
-spec:
-  type: NodePort
-  ports:
-    - port: 80
-      targetPort: 80
-      nodePort: 32000 # This opens up port 32000 on your AWS workers to view the live app
-  selector:
-    app: phoenix-frontend
+      - name: backend
+        image: ghcr.io/ts-a-devops/taskapp-backend:v1.0.0
+        ports:
+        - containerPort: 80

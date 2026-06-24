@@ -1,0 +1,22 @@
+---
+- name: Check if K3s is already installed
+  stat:
+    path: /usr/local/bin/k3s
+  register: k3s_installed
+
+- name: Install K3s server (master node) without bundled Traefik
+  shell: curl -sfL https://get.k3s.io | sh -s - --disable traefik --tls-san=100.48.62.165
+  when: not k3s_installed.stat.exists
+
+- name: Wait for node-token file to be generated
+  wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+
+- name: Read the cluster node-token
+  slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: node_token_encoded
+
+- name: Set cluster token as a fact on master
+  set_fact:
+    k3s_cluster_token: "{{ node_token_encoded['content'] | b64decode | trim }}"

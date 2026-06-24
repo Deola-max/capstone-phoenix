@@ -1,0 +1,12 @@
+---
+- name: Configure K3s Control Plane
+  hosts: control_plane
+  become: true
+  roles:
+    - k3s-server
+
+- name: Configure K3s Worker Agents
+  hosts: workers
+  become: true
+  roles:
+    - k3s-agent
